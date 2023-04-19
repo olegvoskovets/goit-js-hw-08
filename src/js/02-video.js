@@ -13,24 +13,35 @@ const player = new Player(iframe);
 
 let timerId;
 
-player.on('play', function () {
+//ВИКОРИСТАННЯ setInterval()======
+
+// player.on('play', playPlayer);
+// player.on('pause', pausePlayer);
+
+//and використання setInterval()===
+
+//ВИКОРИСТАННЯ throttle=========
+
+player.on('timeupdate',throttle(function () {getTimeVideo();}, 1000)
+);
+// and використання throttle==============
+
+function playPlayer() {
   timerId = setInterval(() => {
     getTimeVideo();
   }, 1000);
-});
+}
 
-const getTimeVideo = () => {
-  console.log('pihem');
+function getTimeVideo() {
   player
     .getCurrentTime()
     .then(seconds => {
       localStorage.setItem('videoplayer-current-time', seconds);
-      //   playTime = seconds;
     })
     .catch(function (error) {
       // an error occurred
     });
-};
+}
 
 function getTimeLocalStorage() {
   return localStorage.getItem('videoplayer-current-time')
@@ -59,7 +70,7 @@ function pausePlayer() {
   player
     .pause()
     .then(function () {
-      clearTimeout(timerId);
+      clearTimeout(timerId); // зупиняяємо setTimeout
     })
     .catch(function (error) {
       switch (error.name) {
@@ -78,5 +89,3 @@ function pausePlayer() {
       }
     });
 }
-
-player.on('pause', pausePlayer);
